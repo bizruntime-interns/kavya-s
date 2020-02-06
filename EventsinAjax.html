@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+<button class="xhr success" name="xhr">buttonsucess</button>
+<button class="xhr error" name="xhr">buttonerror</button>
+<button  class="xhr abort" name="xhr">buttonabort</button>
+<textarea readonly class="eventlog" > 
+
+
+</textarea>
+<script>
+const xhrbs=document.querySelector('.xhr.success');
+const xhrbe=document.querySelector('.xhr.error');
+const xhrba=document.querySelector('.xhr.abort');
+const log=document.querySelector('.eventlog');
+function handleEvent(e){
+log.textContent=log.textContent+`${e.type}: ${e.loaded} bytes transferred\n`;
+}
+function addListeners(xhr) {
+    xhr.addEventListener('loadstart', handleEvent);
+    xhr.addEventListener('load', handleEvent);
+    xhr.addEventListener('loadend', handleEvent);
+    xhr.addEventListener('progress', handleEvent);
+    xhr.addEventListener('error', handleEvent);
+    xhr.addEventListener('abort', handleEvent);
+}
+function runXHR(url) {
+    log.textContent = '';
+
+    const xhr = new XMLHttpRequest();
+    addListeners(xhr);
+    xhr.open("GET", url);
+    xhr.send();
+    return xhr;  
+}
+
+xhrbs.addEventListener('click', () => {
+    runXHR('demo.txt');
+});
+
+xhrbe.addEventListener('click', () => {
+    runXHR('demo.txt');
+});
+
+xhrbs.addEventListener('click', () => {
+    runXHR('demo.txt').abort();
+});
+</script>
+</body>
+</html>
